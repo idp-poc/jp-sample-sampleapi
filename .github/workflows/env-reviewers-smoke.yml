@@ -1,0 +1,25 @@
+name: env-reviewers smoke (manual)
+
+on:
+  workflow_dispatch:
+
+# Two jobs in sequence:
+#   1. deploy-dev runs straight through (dev env has no required reviewers).
+#   2. deploy-test enters "waiting" until the resolved approver team
+#      (wired by the GitHubRepository Composition pipeline) approves it.
+
+jobs:
+  deploy-dev:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: simulate deploy to dev
+        run: echo "deployed to dev"
+
+  deploy-test:
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - name: simulate deploy to test
+        run: echo "deployed to test"
